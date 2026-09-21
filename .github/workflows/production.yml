@@ -1,0 +1,74 @@
+name: Deploy Production Dependencies and Code 🚀
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'The branch to build (defaults to whichever branch triggered this run).'
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      ref:
+        description: 'The branch to build (defaults to whichever branch triggered this run).'
+        required: false
+        type: string
+  push:
+    branches:
+      - 'releases/v*'
+    tags-ignore:
+      - '*.*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Production
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.ref_name }}
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.node-version'
+
+      - name: Clobber lib
+        run: rm -rf lib
+
+      - name: Set up .gitignore
+        run: |
+          sed -i -e's/^lib/# lib/' -e's/^node_module/# node_modules/' .gitignore
+
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install Production node_modules
+        run: |
+          npm ci --omit=dev
+
+      - name: Commit and Push
+        # Keep the run green if the commit fails for the lack of changes
+        continue-on-error: True
+        run: |
+          git config user.email "${{ secrets.GIT_CONFIG_EMAIL }}"
+          git config user.name "${{ secrets.GIT_CONFIG_NAME }}"
+          git add .
+          git commit -m "Deploy Production Code for Commit ${{ github.sha }} 🚀"
+          git push
+
+  validate:
+    name: Validate Release Candidate 🧪
+    needs: build
+    permissions:
+      contents: write
+    secrets: inherit
+    uses: ./.github/workflows/integration.yml
+    with:
+      action-ref: ${{ inputs.ref || github.ref_name }}

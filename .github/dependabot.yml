@@ -1,0 +1,59 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '10:00'
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 5
+      semver-major-days: 15
+      semver-minor-days: 7
+      semver-patch-days: 3
+    groups:
+      lint:
+        patterns:
+          - 'eslint*'
+          - '@eslint/*'
+          - '@typescript-eslint/*'
+          - 'typescript-eslint'
+          - 'prettier*'
+
+      typescript:
+        patterns:
+          - 'typescript'
+
+      jest:
+        patterns:
+          - 'jest*'
+          - '@jest/*'
+          - '@types/jest'
+          - 'ts-jest'
+
+      actions:
+        patterns:
+          - '@actions/*'
+
+      types:
+        patterns:
+          - '@types/*'
+
+      misc:
+        patterns:
+          - '*'
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '10:00'
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 5
+    groups:
+      actions:
+        patterns:
+          - '*'
