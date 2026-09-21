@@ -1,14 +1,14 @@
 {
-  "name": "@jamesives/github-pages-deploy-action",
+  "name": "@step-security/github-pages-deploy-action",
   "description": "GitHub action for building a project and deploying it to GitHub pages.",
-  "author": "James Ives <iam@jamesiv.es> (https://jamesiv.es)",
+  "author": "step-security",
   "version": "4.9.0",
   "license": "MIT",
   "type": "module",
-  "main": "lib/lib.js",
-  "types": "lib/lib.d.ts",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
-    "build": "rimraf lib && tsc --declaration",
+    "build": "rimraf dist && tsc --declaration",
     "test": "jest",
     "lint": "eslint --fix .",
     "lint:check": "eslint .",
@@ -17,12 +17,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JamesIves/github-pages-deploy-action.git"
+    "url": "git+https://github.com/step-security/github-pages-deploy-action.git"
   },
   "bugs": {
-    "url": "https://github.com/JamesIves/github-pages-deploy-action/issues"
+    "url": "https://github.com/step-security/github-pages-deploy-action/issues"
   },
-  "homepage": "https://github.com/JamesIves/github-pages-deploy-action",
+  "homepage": "https://github.com/step-security/github-pages-deploy-action#readme",
   "keywords": [
     "actions",
     "node",
@@ -36,6 +36,7 @@
     "deployment"
   ],
   "dependencies": {
+    "axios": "^1.20.0",
     "@actions/core": "3.0.1",
     "@actions/exec": "3.0.0",
     "@actions/github": "9.1.1",
@@ -51,7 +52,6 @@
     "eslint": "10.8.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-jest": "29.16.1",
-    "eslint-plugin-prettier": "5.5.6",
     "jest": "30.5.0",
     "prettier": "3.9.6",
     "rimraf": "6.1.3",

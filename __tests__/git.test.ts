@@ -33,7 +33,7 @@ describe('git', () => {
       Object.assign(action, {
         hostname: 'github.com',
         silent: false,
-        repositoryPath: 'JamesIves/github-pages-deploy-action',
+        repositoryPath: 'step-security/github-pages-deploy-action',
         token: '123',
         branch: 'branch',
         folder: '.',
@@ -56,7 +56,7 @@ describe('git', () => {
       Object.assign(action, {
         hostname: 'github.com',
         silent: false,
-        repositoryPath: 'JamesIves/github-pages-deploy-action',
+        repositoryPath: 'step-security/github-pages-deploy-action',
         token: '123',
         branch: 'branch',
         folder: '.',
@@ -86,7 +86,7 @@ describe('git', () => {
       Object.assign(action, {
         hostname: 'github.com',
         silent: false,
-        repositoryPath: 'JamesIves/github-pages-deploy-action',
+        repositoryPath: 'step-security/github-pages-deploy-action',
         token: '123',
         branch: 'branch',
         folder: '.',
@@ -106,7 +106,7 @@ describe('git', () => {
       Object.assign(action, {
         hostname: 'github.com',
         silent: false,
-        repositoryPath: 'JamesIves/github-pages-deploy-action',
+        repositoryPath: 'step-security/github-pages-deploy-action',
         token: '123',
         branch: 'branch',
         folder: '.',
@@ -128,7 +128,7 @@ describe('git', () => {
       Object.assign(action, {
         hostname: 'github.com',
         silent: false,
-        repositoryPath: 'JamesIves/github-pages-deploy-action',
+        repositoryPath: 'step-security/github-pages-deploy-action',
         sshKey: true,
         branch: 'branch',
         folder: '.',
@@ -149,7 +149,7 @@ describe('git', () => {
       Object.assign(action, {
         hostname: 'github.com',
         silent: false,
-        repositoryPath: 'JamesIves/github-pages-deploy-action',
+        repositoryPath: 'step-security/github-pages-deploy-action',
         token: '123',
         branch: 'branch',
         folder: '.',
@@ -173,7 +173,7 @@ describe('git', () => {
         folder: 'assets',
         branch: 'branch',
         token: '123',
-        repositoryName: 'JamesIves/montezuma',
+        repositoryName: 'step-security/montezuma',
         pusher: {
           name: 'asd',
           email: 'as@cat'
@@ -530,7 +530,7 @@ describe('git', () => {
         branch: 'branch',
         force: false,
         token: '123',
-        repositoryName: 'JamesIves/montezuma',
+        repositoryName: 'step-security/montezuma',
         pusher: {
           name: 'asd',
           email: 'as@cat'
@@ -554,7 +554,7 @@ describe('git', () => {
         folder: 'assets',
         branch: 'branch',
         token: '123',
-        repositoryName: 'JamesIves/montezuma',
+        repositoryName: 'step-security/montezuma',
         tag: 'v0.1',
         pusher: {
           name: 'asd',
@@ -575,7 +575,7 @@ describe('git', () => {
         folder: 'assets',
         branch: 'branch',
         token: '123',
-        repositoryName: 'JamesIves/montezuma',
+        repositoryName: 'step-security/montezuma',
         lfs: true,
         tag: null,
         pusher: {
@@ -608,7 +608,7 @@ describe('git', () => {
         folder: 'assets',
         branch: 'branch',
         token: '123',
-        repositoryName: 'JamesIves/montezuma',
+        repositoryName: 'step-security/montezuma',
         lfs: true,
         tag: null,
         pusher: {
@@ -646,7 +646,7 @@ describe('git', () => {
         folder: 'assets',
         branch: 'branch',
         token: '123',
-        repositoryName: 'JamesIves/montezuma',
+        repositoryName: 'step-security/montezuma',
         pusher: {
           name: 'asd',
           email: 'as@cat'
@@ -679,7 +679,7 @@ describe('git', () => {
             return {
               stdout: '',
               stderr:
-                "fatal: unable to access 'https://github.com/JamesIves/montezuma.git/': Could not resolve host: github.com\n"
+                "fatal: unable to access 'https://github.com/step-security/montezuma.git/': Could not resolve host: github.com\n"
             }
           }
           return {stdout: '', stderr: ''}
@@ -692,7 +692,7 @@ describe('git', () => {
           branch: 'branch',
           force: false,
           token: '123',
-          repositoryName: 'JamesIves/montezuma',
+          repositoryName: 'step-security/montezuma',
           pusher: {
             name: 'asd',
             email: 'as@cat'
@@ -701,7 +701,7 @@ describe('git', () => {
         })
 
         await expect(deploy(action)).rejects.toThrow(
-          "The deploy step encountered an error: fatal: unable to access 'https://github.com/JamesIves/montezuma.git/': Could not resolve host: github.com\n ❌"
+          "The deploy step encountered an error: fatal: unable to access 'https://github.com/step-security/montezuma.git/': Could not resolve host: github.com\n ❌"
         )
       })
     })

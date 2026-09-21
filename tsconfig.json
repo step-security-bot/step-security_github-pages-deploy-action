@@ -4,7 +4,7 @@
     "lib": ["es2022"],
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "outDir": "./lib",
+    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "noImplicitAny": false,

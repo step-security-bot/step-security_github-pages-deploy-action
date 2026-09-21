@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |
@@ -97,7 +97,7 @@ By default, the action does not need any token configuration and uses the provid
 | Key       | Value Information                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Type   | Required |
 | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | -------- |
 | `token`   | This option defaults to the repository scoped GitHub Token. However, if you need more permissions for things such as deploying to another repository, you can add a Personal Access Token (PAT) here. This should be stored in the `secrets / with` menu **as a secret**. We recommend using a service account with the least permissions necessary and recommend when generating a new PAT that you select the least permission scopes necessary. [Learn more about creating and using encrypted secrets here.](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets) | `with` | **No**   |
-| `ssh-key` | You can configure the action to deploy using SSH by setting this option to a private SSH key stored **as a secret**. It can also be set to `true` to use an existing SSH client configuration. For more detailed information on how to add your public/private ssh key pair please refer to the [Using a Deploy Key section of this README](https://github.com/step-security/github-pages-deploy-action/tree/dev#using-an-ssh-deploy-key-).                                                                                                                                                                                                | `with` | **No**   |
+| `ssh-key` | You can configure the action to deploy using SSH by setting this option to a private SSH key stored **as a secret**. It can also be set to `true` to use an existing SSH client configuration. For more detailed information on how to add your public/private ssh key pair please refer to the [Using a Deploy Key section of this README](https://github.com/step-security/github-pages-deploy-action/tree/dev#using-an-ssh-deploy-key-).                                                                                                                                                                                            | `with` | **No**   |
 
 #### Optional Choices
 
@@ -106,7 +106,7 @@ By default, the action does not need any token configuration and uses the provid
 | `branch`                | This is the branch you wish to deploy to, for example, `gh-pages` or `docs`. Defaults to `gh-pages`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `with` | **No**   |
 | `git-config-name`       | Allows you to customize the name that is attached to the git config which is used when pushing the deployment commits. If this is not included it will use the name in the GitHub context, followed by the name of the action.                                                                                                                                                                                                                                                                                                                                                                 | `with` | **No**   |
 | `git-config-email`      | Allows you to customize the email that is attached to the git config which is used when pushing the deployment commits. If this is not included it will use the email in the GitHub context, followed by a generic noreply GitHub email. You can include `<>` for the value if you wish to omit this field altogether and push the commits without an email.                                                                                                                                                                                                                                   | `with` | **No**   |
-| `repository-name`       | Allows you to specify a different repository path so long as you have permissions to push to it. This should be formatted like so: `step-security/github-pages-deploy-action`. You'll need to use a PAT in the `token` input for this configuration option to work properly. **When using `actions/checkout`, you must also set `persist-credentials: false` in the checkout step to prevent authentication conflicts.**                                                                                                                                                                           | `with` | **No**   |
+| `repository-name`       | Allows you to specify a different repository path so long as you have permissions to push to it. This should be formatted like so: `step-security/github-pages-deploy-action`. You'll need to use a PAT in the `token` input for this configuration option to work properly. **When using `actions/checkout`, you must also set `persist-credentials: false` in the checkout step to prevent authentication conflicts.**                                                                                                                                                                       | `with` | **No**   |
 | `target-folder`         | If you'd like to push the contents of the deployment folder into a specific directory on the deployment branch you can specify it here.                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `with` | **No**   |
 | `commit-message`        | If you need to customize the commit message for an integration you can do so.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `with` | **No**   |
 | `clean`                 | You can use this option to delete files from your deployment destination that no longer exist in your deployment source. One use case is if your project generates hashed files that vary from build to build. Using `clean` will not affect `.git`, `.github`, or `.ssh` directories. This option is turned on by default and can be toggled off by setting it to `false`.                                                                                                                                                                                                                    | `with` | **No**   |
@@ -171,7 +171,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |
@@ -221,7 +221,7 @@ jobs:
     runs-on: windows-latest # The first job utilizes windows-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |
@@ -229,7 +229,7 @@ jobs:
           npm run build
 
       - name: Upload Artifacts 🔺 # The project is then uploaded as an artifact named 'site'.
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v7
         with:
           name: site
           path: build
@@ -240,10 +240,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download Artifacts 🔻 # The built project is downloaded into the 'site' folder.
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v8
         with:
           name: site
 
@@ -294,7 +294,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |

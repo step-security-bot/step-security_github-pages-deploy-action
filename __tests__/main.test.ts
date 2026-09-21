@@ -30,7 +30,7 @@ describe('main', () => {
 
   it('should run through the commands', async () => {
     Object.assign(action, {
-      repositoryPath: 'JamesIves/github-pages-deploy-action',
+      repositoryPath: 'step-security/github-pages-deploy-action',
       folder: '.github/docs',
       branch: 'branch',
       token: '123',
@@ -51,7 +51,7 @@ describe('main', () => {
   it('should run through the commands and succeed', async () => {
     Object.assign(action, {
       hostname: 'github.com',
-      repositoryPath: 'JamesIves/github-pages-deploy-action',
+      repositoryPath: 'step-security/github-pages-deploy-action',
       folder: '.github/docs',
       branch: 'branch',
       token: '123',

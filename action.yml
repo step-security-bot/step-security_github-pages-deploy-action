@@ -1,9 +1,9 @@
 name: 'Deploy to GitHub Pages'
 description: 'This action will handle the deployment process of your project to GitHub Pages.'
-author: 'James Ives <iam@jamesiv.es>'
+author: 'step-security'
 runs:
   using: 'node24'
-  main: 'lib/main.js'
+  main: 'dist/main.js'
 branding:
   icon: 'git-commit'
   color: 'orange'
@@ -80,7 +80,7 @@ inputs:
     required: false
 
   repository-name:
-    description: 'Allows you to specify a different repository path so long as you have permissions to push to it. This should be formatted like so: JamesIves/github-pages-deploy-action'
+    description: 'Allows you to specify a different repository path so long as you have permissions to push to it. This should be formatted like so: step-security/github-pages-deploy-action'
     required: false
 
   tag:

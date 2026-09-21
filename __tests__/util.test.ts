@@ -84,7 +84,7 @@ describe('util', () => {
   describe('generateRepositoryPath', () => {
     it('should return ssh if ssh is provided', async () => {
       const action = {
-        repositoryName: 'JamesIves/github-pages-deploy-action',
+        repositoryName: 'step-security/github-pages-deploy-action',
         branch: '123',
         workspace: 'src/',
         folder: 'build',
@@ -96,13 +96,13 @@ describe('util', () => {
       }
 
       expect(generateRepositoryPath(action)).toEqual(
-        'git@github.com:JamesIves/github-pages-deploy-action'
+        'git@github.com:step-security/github-pages-deploy-action'
       )
     })
 
     it('should return https with x-access-token if deploy token is provided', async () => {
       const action = {
-        repositoryName: 'JamesIves/github-pages-deploy-action',
+        repositoryName: 'step-security/github-pages-deploy-action',
         branch: '123',
         workspace: 'src/',
         folder: 'build',
@@ -114,14 +114,14 @@ describe('util', () => {
       }
 
       expect(generateRepositoryPath(action)).toEqual(
-        'https://x-access-token:123@enterprise.github.com/JamesIves/github-pages-deploy-action.git'
+        'https://x-access-token:123@enterprise.github.com/step-security/github-pages-deploy-action.git'
       )
     })
 
     describe('suppressSensitiveInformation', () => {
       it('should replace any sensitive information with ***', async () => {
         const action = {
-          repositoryName: 'JamesIves/github-pages-deploy-action',
+          repositoryName: 'step-security/github-pages-deploy-action',
           repositoryPath:
             'https://x-access-token:supersecret999%%%@github.com/anothersecret123333',
           branch: '123',
@@ -140,7 +140,7 @@ describe('util', () => {
 
       it('should not suppress information when in debug mode', async () => {
         const action = {
-          repositoryName: 'JamesIves/github-pages-deploy-action',
+          repositoryName: 'step-security/github-pages-deploy-action',
           repositoryPath:
             'https://x-access-token:supersecret999%%%@github.com/anothersecret123333',
           branch: '123',

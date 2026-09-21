@@ -9,8 +9,7 @@ node_modules
 assets/.nojekyll
 assets/CNAME
 
-# Build
-lib
+# Build (dist is committed)
 
 ## SSH
 .ssh
