@@ -13,8 +13,7 @@ import {
   extractErrorMessage,
   isNullOrUndefined,
   suppressSensitiveInformation,
-  getRsyncVersion,
-  escapeShellArg
+  getRsyncVersion
 } from './util.js'
 
 /**
@@ -133,7 +132,7 @@ export async function deploy(action: ActionInterface): Promise<Status> {
       Boolean(
         (
           await execute(
-            `git ls-remote --heads ${action.repositoryPath} refs/heads/${escapeShellArg(action.branch)}`,
+            `git ls-remote --heads ${action.repositoryPath} refs/heads/${action.branch}`,
             action.workspace,
             action.silent
           )
@@ -145,7 +144,7 @@ export async function deploy(action: ActionInterface): Promise<Status> {
     /* Relaxes permissions of folder due to be deployed so rsync can write to/from it. */
     try {
       await execute(
-        `chmod -R +rw ${escapeShellArg(action.folderPath as string)}`,
+        `chmod -R +rw ${action.folderPath}`,
         action.workspace,
         true // Always silent to avoid flooding output on read-only folders
       )
@@ -171,7 +170,7 @@ export async function deploy(action: ActionInterface): Promise<Status> {
       Allows the user to specify the root if '.' is provided.
       rsync is used to prevent file duplication. */
     await execute(
-      `rsync -q -av --checksum --progress ${isMkpathSupported && action.targetFolder ? '--mkpath' : ''} ${escapeShellArg(action.folderPath as string)}/. ${
+      `rsync -q -av --checksum --progress ${isMkpathSupported && action.targetFolder ? '--mkpath' : ''} ${action.folderPath}/. ${
         action.targetFolder
           ? `${temporaryDeploymentDirectory}/${action.targetFolder}`
           : temporaryDeploymentDirectory
@@ -220,7 +219,7 @@ export async function deploy(action: ActionInterface): Promise<Status> {
     // changed.
     const checkGitStatus =
       branchExists && action.singleCommit
-        ? `git diff origin/${escapeShellArg(action.branch)}`
+        ? `git diff origin/${action.branch}`
         : `git status --porcelain`
 
     info(`Checking if there are files to commit…`)
@@ -256,10 +255,8 @@ export async function deploy(action: ActionInterface): Promise<Status> {
       `${action.workspace}/${temporaryDeploymentDirectory}`,
       action.silent
     )
-    // Escape single quotes in commit message for safe shell execution
-    const escapedMessage = commitMessage.replace(/'/g, "'\\''")
     await execute(
-      `git commit -m '${escapedMessage}' --quiet --no-verify`,
+      `git commit -m "${commitMessage}" --quiet --no-verify`,
       `${action.workspace}/${temporaryDeploymentDirectory}`,
       action.silent
     )
@@ -274,7 +271,7 @@ export async function deploy(action: ActionInterface): Promise<Status> {
       // the meantime
       info(`Force-pushing changes...`)
       await execute(
-        `git push --force ${action.repositoryPath} ${temporaryDeploymentBranch}:${escapeShellArg(action.branch)}`,
+        `git push --force ${action.repositoryPath} ${temporaryDeploymentBranch}:${action.branch}`,
         `${action.workspace}/${temporaryDeploymentDirectory}`,
         action.silent
       )
@@ -298,13 +295,13 @@ export async function deploy(action: ActionInterface): Promise<Status> {
         if (rejected) {
           info(`Fetching upstream ${action.branch}…`)
           await execute(
-            `git fetch ${action.repositoryPath} ${escapeShellArg(action.branch)}:${escapeShellArg(action.branch)}`,
+            `git fetch ${action.repositoryPath} ${action.branch}:${action.branch}`,
             `${action.workspace}/${temporaryDeploymentDirectory}`,
             action.silent
           )
           info(`Rebasing this deployment onto ${action.branch}…`)
           await execute(
-            `git rebase ${escapeShellArg(action.branch)} ${escapeShellArg(temporaryDeploymentBranch)}`,
+            `git rebase ${action.branch} ${temporaryDeploymentBranch}`,
             `${action.workspace}/${temporaryDeploymentDirectory}`,
             action.silent
           )
@@ -313,7 +310,7 @@ export async function deploy(action: ActionInterface): Promise<Status> {
         info(`Pushing changes… (attempt ${attempt} of ${attemptLimit})`)
 
         const pushResult = await execute(
-          `git push --porcelain ${action.repositoryPath} ${temporaryDeploymentBranch}:${escapeShellArg(action.branch)}`,
+          `git push --porcelain ${action.repositoryPath} ${temporaryDeploymentBranch}:${action.branch}`,
           `${action.workspace}/${temporaryDeploymentDirectory}`,
           action.silent,
           true // Ignore non-zero exit status

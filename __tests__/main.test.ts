@@ -14,7 +14,6 @@ import '../src/main.js'
 import {action, TestFlag} from '../src/constants.js'
 import run from '../src/lib.js'
 import {execute} from '../src/execute.js'
-import {rmRF} from '@actions/io'
 import {setFailed, exportVariable} from '@actions/core'
 
 const originalAction = JSON.stringify(action)

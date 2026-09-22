@@ -1,7 +1,7 @@
 import {info} from '@actions/core'
 import {ActionInterface} from './constants.js'
 import {execute} from './execute.js'
-import {extractErrorMessage, suppressSensitiveInformation, escapeShellArg} from './util.js'
+import {extractErrorMessage, suppressSensitiveInformation} from './util.js'
 
 /**
  * Git checkout command.
@@ -61,7 +61,7 @@ export async function generateWorktree(
 
     if (branchExists) {
       await execute(
-        `git fetch --no-recurse-submodules --depth=1 origin ${escapeShellArg(action.branch)}`,
+        `git fetch --no-recurse-submodules --depth=1 origin ${action.branch}`,
         action.workspace,
         action.silent
       )
