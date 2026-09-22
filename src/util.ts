@@ -25,6 +25,13 @@ export const isNullOrUndefined = (
   typeof value === 'undefined' || value === null || value === ''
 
 /**
+ * Escapes a string for safe use in shell commands by wrapping in single quotes
+ * and escaping any single quotes in the input.
+ */
+export const escapeShellArg = (arg: string | undefined): string =>
+  arg ? `'${arg.replace(/'/g, "'\\''")}'` : ''
+
+/**
  * Generates a token type used for the action.
  */
 export const generateTokenType = (action: ActionInterface): string =>
@@ -116,7 +123,11 @@ export const suppressSensitiveInformation = (
   }
 
   const orderedByLength = (
-    [action.token, action.repositoryPath].filter(Boolean) as string[]
+    [
+      action.token,
+      action.repositoryPath,
+      ...(typeof action.sshKey === 'string' ? [action.sshKey] : [])
+    ].filter(Boolean) as string[]
   ).sort((a, b) => b.length - a.length)
 
   for (const find of orderedByLength) {

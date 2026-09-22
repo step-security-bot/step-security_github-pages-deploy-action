@@ -1,6 +1,6 @@
 import { info } from '@actions/core';
 import { execute } from './execute.js';
-import { extractErrorMessage, suppressSensitiveInformation } from './util.js';
+import { extractErrorMessage, suppressSensitiveInformation, escapeShellArg } from './util.js';
 /**
  * Git checkout command.
  */
@@ -48,7 +48,7 @@ export async function generateWorktree(action, worktreedir, branchExists) {
     try {
         info('Creating worktree…');
         if (branchExists) {
-            await execute(`git fetch --no-recurse-submodules --depth=1 origin ${action.branch}`, action.workspace, action.silent);
+            await execute(`git fetch --no-recurse-submodules --depth=1 origin ${escapeShellArg(action.branch)}`, action.workspace, action.silent);
         }
         await execute(`git worktree add --no-checkout --detach ${worktreedir}`, action.workspace, action.silent);
         let branchName = action.branch;

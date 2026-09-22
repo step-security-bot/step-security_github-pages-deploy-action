@@ -13,6 +13,11 @@ const replaceAll = (input, find, replace) => input.split(find).join(replace);
  */
 export const isNullOrUndefined = (value) => typeof value === 'undefined' || value === null || value === '';
 /**
+ * Escapes a string for safe use in shell commands by wrapping in single quotes
+ * and escaping any single quotes in the input.
+ */
+export const escapeShellArg = (arg) => arg ? `'${arg.replace(/'/g, "'\\''")}'` : '';
+/**
  * Generates a token type used for the action.
  */
 export const generateTokenType = (action) => action.sshKey ? 'SSH Deploy Key' : action.token ? 'Deploy Token' : '…';
@@ -69,7 +74,11 @@ export const suppressSensitiveInformation = (str, action) => {
         // Data is unmasked in debug mode.
         return value;
     }
-    const orderedByLength = [action.token, action.repositoryPath].filter(Boolean).sort((a, b) => b.length - a.length);
+    const orderedByLength = [
+        action.token,
+        action.repositoryPath,
+        ...(typeof action.sshKey === 'string' ? [action.sshKey] : [])
+    ].filter(Boolean).sort((a, b) => b.length - a.length);
     for (const find of orderedByLength) {
         value = replaceAll(value, find, '***');
     }

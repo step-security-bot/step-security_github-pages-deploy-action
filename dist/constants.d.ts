@@ -35,7 +35,7 @@ export interface ActionInterface {
     isTest: TestFlag;
     /** The git config name. */
     name?: string;
-    /** The repository path, for example JamesIves/github-pages-deploy-action. */
+    /** The repository path, for example step-security/github-pages-deploy-action. */
     repositoryName?: string;
     /** The fully qualified repository path, this gets auto generated if repositoryName is provided. */
     repositoryPath?: string;
@@ -64,7 +64,7 @@ export interface NodeActionInterface {
     branch?: string;
     /** The folder to deploy. */
     folder: string;
-    /** The repository path, for example JamesIves/github-pages-deploy-action. */
+    /** The repository path, for example step-security/github-pages-deploy-action. */
     repositoryName: string;
     /** GitHub deployment token. */
     token?: string | null;

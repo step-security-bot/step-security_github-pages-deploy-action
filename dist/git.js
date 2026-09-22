@@ -4,7 +4,7 @@ import fs from 'fs';
 import { DefaultExcludedFiles, Status, TestFlag } from './constants.js';
 import { execute } from './execute.js';
 import { generateWorktree } from './worktree.js';
-import { extractErrorMessage, isNullOrUndefined, suppressSensitiveInformation, getRsyncVersion } from './util.js';
+import { extractErrorMessage, isNullOrUndefined, suppressSensitiveInformation, getRsyncVersion, escapeShellArg } from './util.js';
 /**
  * Initializes git in the workspace.
  */
@@ -73,11 +73,11 @@ export async function deploy(action) {
                 : ''} 🚀`;
         // Checks to see if the remote exists prior to deploying.
         const branchExists = action.isTest & TestFlag.HAS_REMOTE_BRANCH ||
-            Boolean((await execute(`git ls-remote --heads ${action.repositoryPath} refs/heads/${action.branch}`, action.workspace, action.silent)).stdout);
+            Boolean((await execute(`git ls-remote --heads ${action.repositoryPath} refs/heads/${escapeShellArg(action.branch)}`, action.workspace, action.silent)).stdout);
         await generateWorktree(action, temporaryDeploymentDirectory, branchExists);
         /* Relaxes permissions of folder due to be deployed so rsync can write to/from it. */
         try {
-            await execute(`chmod -R +rw ${action.folderPath}`, action.workspace, true // Always silent to avoid flooding output on read-only folders
+            await execute(`chmod -R +rw ${escapeShellArg(action.folderPath)}`, action.workspace, true // Always silent to avoid flooding output on read-only folders
             );
         }
         catch {
@@ -98,7 +98,7 @@ export async function deploy(action) {
           Pushes all of the build files into the deployment directory.
           Allows the user to specify the root if '.' is provided.
           rsync is used to prevent file duplication. */
-        await execute(`rsync -q -av --checksum --progress ${isMkpathSupported && action.targetFolder ? '--mkpath' : ''} ${action.folderPath}/. ${action.targetFolder
+        await execute(`rsync -q -av --checksum --progress ${isMkpathSupported && action.targetFolder ? '--mkpath' : ''} ${escapeShellArg(action.folderPath)}/. ${action.targetFolder
             ? `${temporaryDeploymentDirectory}/${action.targetFolder}`
             : temporaryDeploymentDirectory} ${action.clean
             ? `--delete ${cleanExcludeFilters} ${!fs.existsSync(`${action.folderPath}/${DefaultExcludedFiles.CNAME}`)
@@ -119,7 +119,7 @@ export async function deploy(action) {
         // we're really interested if the diff against the upstream branch
         // changed.
         const checkGitStatus = branchExists && action.singleCommit
-            ? `git diff origin/${action.branch}`
+            ? `git diff origin/${escapeShellArg(action.branch)}`
             : `git status --porcelain`;
         info(`Checking if there are files to commit…`);
         const hasFilesToCommit = action.isTest & TestFlag.HAS_CHANGED_FILES ||
@@ -133,7 +133,9 @@ export async function deploy(action) {
         // Commits to GitHub.
         await execute(`git add --all .`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
         await execute(`git checkout -b ${temporaryDeploymentBranch}`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
-        await execute(`git commit -m "${commitMessage}" --quiet --no-verify`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
+        // Escape single quotes in commit message for safe shell execution
+        const escapedMessage = commitMessage.replace(/'/g, "'\\''");
+        await execute(`git commit -m '${escapedMessage}' --quiet --no-verify`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
         if (action.dryRun) {
             info(`Dry run complete`);
             return Status.SUCCESS;
@@ -142,7 +144,7 @@ export async function deploy(action) {
             // Force-push our changes, overwriting any changes that were added in
             // the meantime
             info(`Force-pushing changes...`);
-            await execute(`git push --force ${action.repositoryPath} ${temporaryDeploymentBranch}:${action.branch}`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
+            await execute(`git push --force ${action.repositoryPath} ${temporaryDeploymentBranch}:${escapeShellArg(action.branch)}`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
         }
         else {
             const attemptLimit = action.attemptLimit || 3;
@@ -160,12 +162,12 @@ export async function deploy(action) {
                 // not be pushed
                 if (rejected) {
                     info(`Fetching upstream ${action.branch}…`);
-                    await execute(`git fetch ${action.repositoryPath} ${action.branch}:${action.branch}`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
+                    await execute(`git fetch ${action.repositoryPath} ${escapeShellArg(action.branch)}:${escapeShellArg(action.branch)}`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
                     info(`Rebasing this deployment onto ${action.branch}…`);
-                    await execute(`git rebase ${action.branch} ${temporaryDeploymentBranch}`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
+                    await execute(`git rebase ${escapeShellArg(action.branch)} ${escapeShellArg(temporaryDeploymentBranch)}`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent);
                 }
                 info(`Pushing changes… (attempt ${attempt} of ${attemptLimit})`);
-                const pushResult = await execute(`git push --porcelain ${action.repositoryPath} ${temporaryDeploymentBranch}:${action.branch}`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent, true // Ignore non-zero exit status
+                const pushResult = await execute(`git push --porcelain ${action.repositoryPath} ${temporaryDeploymentBranch}:${escapeShellArg(action.branch)}`, `${action.workspace}/${temporaryDeploymentDirectory}`, action.silent, true // Ignore non-zero exit status
                 );
                 rejected =
                     Boolean(action.isTest) ||

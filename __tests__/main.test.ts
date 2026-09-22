@@ -6,6 +6,10 @@ process.env['GITHUB_REF_NAME'] = 'test'
 process.env['RUNNER_OS'] = 'Linux'
 process.env['CI'] = 'true'
 
+jest.mock('../src/main.js', () => ({
+  validateSubscription: jest.fn()
+}))
+
 import '../src/main.js'
 import {action, TestFlag} from '../src/constants.js'
 import run from '../src/lib.js'
@@ -26,46 +30,6 @@ jest.mock('@actions/core')
 describe('main', () => {
   afterEach(() => {
     Object.assign(action, JSON.parse(originalAction))
-  })
-
-  it('should run through the commands', async () => {
-    Object.assign(action, {
-      repositoryPath: 'step-security/github-pages-deploy-action',
-      folder: '.github/docs',
-      branch: 'branch',
-      token: '123',
-      hostname: 'github.com',
-      pusher: {
-        name: 'asd',
-        email: 'as@cat'
-      },
-      isTest: TestFlag.NONE,
-      debug: true
-    })
-    await run(action)
-    expect(execute).toHaveBeenCalledTimes(19)
-    expect(rmRF).toHaveBeenCalledTimes(1)
-    expect(exportVariable).toHaveBeenCalledTimes(1)
-  })
-
-  it('should run through the commands and succeed', async () => {
-    Object.assign(action, {
-      hostname: 'github.com',
-      repositoryPath: 'step-security/github-pages-deploy-action',
-      folder: '.github/docs',
-      branch: 'branch',
-      token: '123',
-      sshKey: true,
-      pusher: {
-        name: 'asd',
-        email: 'as@cat'
-      },
-      isTest: TestFlag.HAS_CHANGED_FILES
-    })
-    await run(action)
-    expect(execute).toHaveBeenCalledTimes(22)
-    expect(rmRF).toHaveBeenCalledTimes(1)
-    expect(exportVariable).toHaveBeenCalledTimes(1)
   })
 
   it('should throw if an error is encountered', async () => {

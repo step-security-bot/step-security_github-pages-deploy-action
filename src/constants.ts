@@ -16,7 +16,7 @@ export enum TestFlag {
   HAS_REJECTED_COMMIT = 1 << 5 // Assume commit rejection.
 }
 
-/* For more information please refer to the README: https://github.com/JamesIves/github-pages-deploy-action */
+/* For more information please refer to the README: https://github.com/step-security/github-pages-deploy-action */
 export interface ActionInterface {
   /** The branch that the action should deploy to. */
   branch: string
@@ -46,7 +46,7 @@ export interface ActionInterface {
   isTest: TestFlag
   /** The git config name. */
   name?: string
-  /** The repository path, for example JamesIves/github-pages-deploy-action. */
+  /** The repository path, for example step-security/github-pages-deploy-action. */
   repositoryName?: string
   /** The fully qualified repository path, this gets auto generated if repositoryName is provided. */
   repositoryPath?: string
@@ -76,7 +76,7 @@ export interface NodeActionInterface {
   branch?: string
   /** The folder to deploy. */
   folder: string
-  /** The repository path, for example JamesIves/github-pages-deploy-action. */
+  /** The repository path, for example step-security/github-pages-deploy-action. */
   repositoryName: string
   /** GitHub deployment token. */
   token?: string | null

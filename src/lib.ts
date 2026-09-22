@@ -44,14 +44,6 @@ export default async function run(
     ╱╱╱╱╱╱╱╰╯╱╱╱╱╱╱╰━━╯
     `)
 
-    info(`
-    💖 Support: https://github.com/sponsors/JamesIves
-    📣 Maintained by James Ives: https://jamesiv.es
-
-    🚀 Getting Started Guide: https://github.com/JamesIves/github-pages-deploy-action
-    ❓ Discussions / Q&A: https://github.com/JamesIves/github-pages-deploy-action/discussions
-    🔧 Report a Bug: https://github.com/JamesIves/github-pages-deploy-action/issues`)
-
     info('Checking configuration and starting deployment… 🚦')
 
     const settings: ActionInterface = {

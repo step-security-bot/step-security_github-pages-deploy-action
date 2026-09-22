@@ -5,6 +5,11 @@ import { ActionInterface } from './constants.js';
  */
 export declare const isNullOrUndefined: (value: unknown) => value is undefined | null | "";
 /**
+ * Escapes a string for safe use in shell commands by wrapping in single quotes
+ * and escaping any single quotes in the input.
+ */
+export declare const escapeShellArg: (arg: string | undefined) => string;
+/**
  * Generates a token type used for the action.
  */
 export declare const generateTokenType: (action: ActionInterface) => string;
